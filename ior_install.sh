@@ -6,7 +6,8 @@
 # on the Rocky Linux Operating System.  The IOR project can be found at
 # https://github.com/hpc/ior
 
-HOMEBASE=/home/daperk/software
+# directory to install software (mpich, ior)
+HOMEBASE=/usr/local/share/software
 MPICH_VERSION=4.0.2
 NUM_THREADS=3
 
