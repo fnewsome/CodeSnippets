@@ -8,6 +8,7 @@
 
 HOMEBASE=/home/daperk/software
 MPICH_VERSION=4.0.2
+NUM_THREADS=3
 
 setupEnvironment() {
     # Install Development Tools
@@ -63,7 +64,7 @@ installIor(){
     ./configure --prefix=$HOMEBASE/ior    
 
     # run make and make install
-    make -j2
+    make -j${NUM_THREADS}
     make install
 
     echo "ior executable has been installed in the following folder: ${HOMEBASE}/ior/bin"
@@ -82,7 +83,7 @@ installMpich(){
     MPICH_FOLDER=`echo mpich-${MPICH_VERSION}`
     cd "${MPICH_FOLDER}"
     ./configure --prefix=$HOMEBASE/mpich-$MPICH_VERSION
-    make -j2
+    make -j$NUM_THREADS
     make install
 }
 
