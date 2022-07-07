@@ -77,19 +77,19 @@ downloadMpich(){
 }
 
 installMpich(){
-    downloadMpich
-    
-    `tar xzf mpich-${MPICH_VERSION}.tar.gz`
+    #downloadMpich
+    echo 'I came here'
+    #`tar xzf mpich-${MPICH_VERSION}.tar.gz`
     MPICH_FOLDER=`echo mpich-${MPICH_VERSION}`
     cd "${MPICH_FOLDER}"
-    ./configure --prefix=$HOMEBASE/mpich-${MPICH_VERSION}
+    ./configure --prefix=$HOMEBASE/mpich-$MPICH_VERSION
     make -j2
     make install
 }
 
-cleanUp
-setupEnvironment
+#cleanUp
+#setupEnvironment
 installMpich
-downloadIor
-installIor
-cleanUp
+#downloadIor
+#installIor
+#cleanUp
