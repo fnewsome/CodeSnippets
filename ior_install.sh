@@ -1,5 +1,11 @@
 #!/bin/sh
 
+# Description: This is an install script for the installing IOR
+# which is a parallel IO benchmark that can be used to test the performance
+# of parallel storage systems.  The script below will install IOR 
+# on the Rocky Linux Operating System.  The IOR project can be found at
+# https://github.com/hpc/ior
+
 HOMEBASE=/home/daperk/software
 MPICH_VERSION=4.0.2
 
