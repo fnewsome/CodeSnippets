@@ -40,17 +40,20 @@ setupEnvironment() {
 }
 
 cleanUp() {
-    `sudo rm -rf ior` || error_exit "Could not delete the directory: 'ior'"
-    `sudo rm -f mpich-${MPICH_VERSION}.tar.gz` || error_exit "Could not delete the file: mpich-${MPICH_VERSION}.tar.gz"
-    `sudo rm -rf mpich-${MPICH_VERSION}` || error_exit "Could not delete the directory: mpich-${MPICH_VERSION}"
+    echo 'Performing cleanup of files/directories..'
+    `rm -rf ior` || error_exit "Could not delete the directory: 'ior'"
+    `rm -f mpich-${MPICH_VERSION}.tar.gz` || error_exit "Could not delete the file: mpich-${MPICH_VERSION}.tar.gz"
+    `rm -rf mpich-${MPICH_VERSION}` || error_exit "Could not delete the directory: mpich-${MPICH_VERSION}"
 }
 
 downloadIor(){
+    echo 'Download ior source code..'
     # Retrieve the ior project from Github
     git clone https://github.com/hpc/ior.git || error_exit "Could not download 'ior' from https://github.com/hpc/ior.git"
 }
 
 installIor(){
+    echo 'Begin installing ior..'
     # get the name of the user who called 'sudo'
     USERNAME=`logname 2>/dev/null || echo $SUDO_USER`
 
@@ -61,8 +64,6 @@ installIor(){
     if [[ len -eq 0 ]]; then
         `echo PATH=$PATH:/usr/lib/openmpi/bin/mpicc:/usr/lib64/openmpi/lib/:/usr/lib/openmpi/bin:$HOMEBASE/mpich_${MPICH_VERSION}/bin:$HOMEBASE/ior/bin >> "/home/$USERNAME/.bash_profile"`
         echo 'Added mpicc, openmpi, mpich to PATH'
-        `source /home/$USERNAME/.bash_profile` || error_exit "Could not reload bash profile."
-        echo 'Reloaded bash profile'
     fi
 
     MODULE_FILE="/etc/profile.d/modules.sh"
@@ -79,21 +80,29 @@ installIor(){
     # Navigate to the folder created from the git clone command
     cd ior  || error_exit "ior folder does not exist."
 
+    echo 'Preparing to run ior boostrap..'
+    
     # execute the ior bootstrap
     ./bootstrap  || error_exit "ior bootstrap failed to run."
 
+    echo 'Completed ior bootstrap..'
+    echo 'Preparing to run ior build configuration..'
+    
     # run the build configuration
     ./configure --prefix=$HOMEBASE/ior || error_exit "Could not configure ior successfully for build."   
 
+    echo 'Completed ior build configuration..'
+    echo 'Preparing to build ior..'
+    
     # run make and make install
     make -j${NUM_THREADS}
-    make install
-
     
-    source "/home/$USERNAME/.bash_profile" || error_exit "Could not reload bash profile."
-    echo "ior executable has been installed in the following folder: ${HOMEBASE}/ior/bin"
-    echo 'ior install complete'
+    echo 'Completed ior build..'
 
+    make install
+    source "/home/$USERNAME/.bash_profile" || error_exit "Could not reload bash profile."
+
+    echo 'Completed ior installation.'
 }
 
 downloadMpich(){
